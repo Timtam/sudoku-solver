@@ -45,7 +45,15 @@ namespace sudoku_solver
 
       n = sudoku.GetLength(0);
 
+      Console.WriteLine("sudoku with " + n + " x " + n + " spots found, solving...");
+
       solution = Solver.Solve(sudoku);
+
+      if(solution == null)
+      {
+        Console.WriteLine("no valid solution could be found");
+        return 0;
+      }
 
       for(i=0; i < n; i++)
       {
