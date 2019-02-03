@@ -65,7 +65,8 @@ namespace sudoku_solver
     {
       int n = sudoku.GetLength(0);
       int[] check;
-      int i,j;
+      int i,j,k,l;
+      int sgsize;
 
       // we will check columns first, so i will be rows and j will be columns
       for(i=0; i < n; i++)
@@ -91,6 +92,28 @@ namespace sudoku_solver
         }
       }
 
+      sgsize = GetSubGridSize(sudoku);
+
+      if(sgsize > 0)
+      {
+        for(i=0; i < n; i += sgsize)
+        {
+          for(j=0; j < n; j += sgsize)
+          {
+            check = new int[n + 1];
+            for(k=i; k < i + sgsize; k++)
+            {
+              for(l=j; l < j + sgsize; l++)
+              {
+                check[sudoku[k,l]]++;
+                if(check[sudoku[k,l]] > 1 && sudoku[k,l] > 0)
+                  return false;
+              }
+            }
+          }
+        }
+      }
+
       return true;
     }
 
@@ -104,6 +127,20 @@ namespace sudoku_solver
           if(sudoku[i,j] == 0)
             return false;
       return true;
+    }
+
+    private static int GetSubGridSize(int[,] sudoku)
+    {
+      int n = sudoku.GetLength(0);
+      double sqrt = Math.Sqrt(n);
+
+      if(sqrt%1 != 0)
+        return 0;
+
+      if(sqrt < 2)
+        return 0;
+
+      return (int)sqrt;
     }
   }
 }
